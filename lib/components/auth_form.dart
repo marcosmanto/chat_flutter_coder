@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:chat_flutter_coder/components/user_image_picker.dart';
 import 'package:chat_flutter_coder/models/auth_form_data.dart';
 import 'package:flutter/material.dart';
 
@@ -14,19 +17,31 @@ class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
   final _formData = AuthFormData();
 
+  void _handleImagePick(File image) {
+    _formData.image = image;
+  }
+
+  void _showError(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(msg),
+      duration: const Duration(seconds: 4),
+      action: SnackBarAction(
+        label: 'FECHAR',
+        onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+      ),
+    ));
+  }
+
   void _submit() {
     final isValid = _formKey.currentState?.validate() ?? false;
     if (!isValid) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text(
-            'Preencha corretamente os campos com erro indicado em vermelho para prosseguir.'),
-        duration: const Duration(seconds: 4),
-        action: SnackBarAction(
-          label: 'FECHAR',
-          onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-        ),
-      ));
-      return;
+      return _showError(
+          'Preencha corretamente os campos com erro indicado em vermelho para prosseguir.');
+    }
+
+    if (_formData.image == null && _formData.isSignup) {
+      return _showError(
+          'Selecione uma imagem ou avatar para concluir o cadastro.');
     }
 
     // send form data to the parent widget AuthPage
@@ -36,13 +51,15 @@ class _AuthFormState extends State<AuthForm> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(20),
+      margin: EdgeInsets.symmetric(horizontal: _formData.isSignup ? 12 : 20),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
             key: _formKey,
             child: Column(
               children: [
+                if (_formData.isSignup)
+                  UserImagePicker(onImagePick: _handleImagePick),
                 if (_formData.isSignup)
                   TextFormField(
                     key: const ValueKey('name'),

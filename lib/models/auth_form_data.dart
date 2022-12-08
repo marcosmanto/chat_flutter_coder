@@ -20,4 +20,18 @@ class AuthFormData {
   void toggleAutMode() {
     _mode = isLogin ? AuthMode.signup : AuthMode.login;
   }
+
+  @override
+  String toString() {
+    return """
+AuthFormData instance:
+----------------------${((name) {
+      return name != null && !name?.isEmpty ? '\nname: $name' : '';
+    }(name))}
+email: $email
+password: $password
+${((imagePath) {
+      return imagePath != null ? 'image: $imagePath' : '';
+    }(image?.path))}""";
+  }
 }

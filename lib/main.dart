@@ -1,4 +1,3 @@
-import 'package:chat_flutter_coder/components/auth_form.dart';
 import 'package:flutter/material.dart';
 
 import 'pages/auth_page.dart';

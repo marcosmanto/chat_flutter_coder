@@ -7,7 +7,9 @@ enum GetImageFrom { camera, gallery }
 
 class UserImagePicker extends StatefulWidget {
   final void Function(File image) onImagePick;
-  const UserImagePicker({super.key, required this.onImagePick});
+  final File? imageAlreadyChoosed;
+  const UserImagePicker(
+      {super.key, required this.onImagePick, this.imageAlreadyChoosed});
 
   @override
   State<UserImagePicker> createState() => _UserImagePickerState();
@@ -15,6 +17,12 @@ class UserImagePicker extends StatefulWidget {
 
 class _UserImagePickerState extends State<UserImagePicker> {
   File? _image;
+
+  @override
+  void initState() {
+    _image = widget.imageAlreadyChoosed;
+    super.initState();
+  }
 
   void _pickImage(GetImageFrom imageFrom) async {
     final ImagePicker picker = ImagePicker();

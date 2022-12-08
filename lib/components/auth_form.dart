@@ -59,7 +59,9 @@ class _AuthFormState extends State<AuthForm> {
             child: Column(
               children: [
                 if (_formData.isSignup)
-                  UserImagePicker(onImagePick: _handleImagePick),
+                  UserImagePicker(
+                      onImagePick: _handleImagePick,
+                      imageAlreadyChoosed: _formData.image),
                 if (_formData.isSignup)
                   TextFormField(
                     key: const ValueKey('name'),

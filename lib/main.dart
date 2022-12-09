@@ -1,6 +1,5 @@
+import 'package:chat_flutter_coder/pages/auth_or_app_page.dart';
 import 'package:flutter/material.dart';
-
-import 'pages/auth_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +21,7 @@ class MyApp extends StatelessWidget {
               tertiary: const Color(0xFFFBE7C6),
             ),
       ),
-      home: const AuthPage(),
+      home: const AuthOrAppPage(),
     );
   }
 }

@@ -1,10 +1,10 @@
-class Chatuser {
+class ChatUser {
   final String id;
   final String name;
   final String email;
   final String imageURL;
 
-  const Chatuser({
+  const ChatUser({
     required this.id,
     required this.name,
     required this.email,

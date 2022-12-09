@@ -1,3 +1,5 @@
+import 'dart:io' as io;
+
 import 'package:chat_flutter_coder/core/models/chat_user.dart';
 import 'package:chat_flutter_coder/core/services/auth/auth_mock_service.dart';
 import 'package:chat_flutter_coder/pages/auth_page.dart';
@@ -14,6 +16,34 @@ class AuthOrAppPage extends StatelessWidget {
       stream: AuthMockService().userChanges,
       builder: (context, snapshot) => Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          toolbarHeight: 65,
+          leading: Align(
+            child: Transform.translate(
+              offset: const Offset(15, 0),
+              child: SizedBox(
+                width: 50,
+                height: 50,
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.grey,
+                  backgroundImage: (() {
+                    if (snapshot.data?.imageURL != null &&
+                        snapshot.data?.imageURL != '') {
+                      try {
+                        return (io.File(snapshot.data!.imageURL).existsSync()
+                                ? FileImage(io.File(snapshot.data!.imageURL))
+                                : AssetImage(snapshot.data!.imageURL))
+                            as ImageProvider;
+                      } catch (_) {
+                        return null;
+                      }
+                    }
+                  })(),
+                ),
+              ),
+            ),
+          ),
           title: Text(
             snapshot.data?.name ?? 'Not logged',
             style: const TextStyle(color: Colors.white),

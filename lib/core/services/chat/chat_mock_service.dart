@@ -32,6 +32,7 @@ class ChatMockService implements ChatService {
       userImageUrl: 'assets/images/avatar.png',
     ),
   ];
+
   static late MultiStreamController<List<ChatMessage>> _controller;
   static final _msgsStream = Stream<List<ChatMessage>>.multi((controller) {
     _controller = controller;

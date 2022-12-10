@@ -16,7 +16,7 @@ class AuthOrAppPage extends StatelessWidget {
     return StreamBuilder<ChatUser?>(
       stream: AuthService().userChanges,
       builder: (context, snapshot) => Scaffold(
-        /*appBar: AppBar(
+        appBar: AppBar(
           centerTitle: true,
           toolbarHeight: 65,
           leading: Align(
@@ -49,7 +49,7 @@ class AuthOrAppPage extends StatelessWidget {
             snapshot.data?.name ?? 'Not logged',
             style: const TextStyle(color: Colors.white),
           ),
-        ),*/
+        ),
         body: snapshot.connectionState == ConnectionState.waiting
             ? const LoadingPage()
             : snapshot.hasData

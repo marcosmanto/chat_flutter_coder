@@ -4,11 +4,16 @@ import 'package:chat_flutter_coder/core/services/auth/auth_service.dart';
 import 'package:chat_flutter_coder/core/services/chat/chat_service.dart';
 import 'package:flutter/material.dart';
 
-class Messages extends StatelessWidget {
-  Messages({super.key});
+class Messages extends StatefulWidget {
+  const Messages({super.key});
 
+  @override
+  State<Messages> createState() => _MessagesState();
+}
+
+class _MessagesState extends State<Messages> {
   final ScrollController _controller = ScrollController();
-  late final BuildContext _context;
+  bool _showScrollDownButton = true;
 
   void _scrollDown() {
     _controller.animateTo(
@@ -18,7 +23,7 @@ class Messages extends StatelessWidget {
     );
   }
 
-  void _showSnackBar(String msg, BuildContext context) {
+  void _showSnackBar(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(msg),
       duration: const Duration(seconds: 4),
@@ -30,19 +35,20 @@ class Messages extends StatelessWidget {
   }
 
   void listenScrolling() {
-    if (_controller.position.atEdge) {
+    /*if (_controller.position.atEdge) {
       final isTop = _controller.position.pixels == 0;
 
       if (isTop) {
-        _showSnackBar('Reached Start', _context);
+        _showSnackBar('Reached Start');
       } else {
-        _showSnackBar('Reached End', _context);
+        _showSnackBar('Reached End');
       }
-    }
+    }*/
   }
 
-  _onInit(BuildContext context) {
-    _context = context;
+  @override
+  void initState() {
+    super.initState();
     _controller.addListener(listenScrolling);
   }
 
@@ -60,11 +66,26 @@ class Messages extends StatelessWidget {
             belongsToCurrentUser: currentUser?.id == msgs[index].userId,
           ),
         ),
-        Positioned(
-          right: 5,
-          child: ElevatedButton(
-              onPressed: _scrollDown, child: const Text('Scroll down')),
-        ),
+        if (_showScrollDownButton) ...[
+          Positioned(
+            top: 5,
+            right: 5,
+            child: CircleAvatar(
+              radius: 12,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          Positioned(
+            top: -6.7,
+            right: -7.5,
+            child: IconButton(
+              iconSize: 16,
+              onPressed: _scrollDown,
+              icon: const Icon(Icons.arrow_downward),
+              color: Colors.white,
+            ),
+          )
+        ]
       ],
     );
   }
@@ -74,49 +95,22 @@ class Messages extends StatelessWidget {
     final currentUser = AuthService().currentUser;
     //Future(_scrollDown);
 
-    return StatefulWrapper(
-      onInit: _onInit(context),
-      child: StreamBuilder<List<ChatMessage>>(
-        stream: ChatService().messagesStream(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-              child: Text('Sem dados. Inicie uma conversa.'),
-            );
-          } else {
-            final msgs = snapshot.data!;
-            return _renderListView(msgs, currentUser);
-          }
-        },
-      ),
+    return StreamBuilder<List<ChatMessage>>(
+      stream: ChatService().messagesStream(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(
+            child: Text('Sem dados. Inicie uma conversa.'),
+          );
+        } else {
+          final msgs = snapshot.data!;
+          return _renderListView(msgs, currentUser);
+        }
+      },
     );
-  }
-}
-
-/// Wrapper for stateful functionality to provide onInit calls in stateles widget
-class StatefulWrapper extends StatefulWidget {
-  final Function? onInit;
-  final Widget child;
-  const StatefulWrapper({super.key, this.onInit, required this.child});
-  @override
-  State<StatefulWrapper> createState() => _StatefulWrapperState();
-}
-
-class _StatefulWrapperState extends State<StatefulWrapper> {
-  @override
-  void initState() {
-    if (widget.onInit != null) {
-      widget.onInit!();
-    }
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
   }
 }

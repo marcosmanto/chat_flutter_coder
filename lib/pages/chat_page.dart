@@ -47,9 +47,9 @@ class ChatPage extends StatelessWidget {
         ),
         body: SafeArea(
             child: Column(
-          children: [
+          children: const [
             Expanded(child: Messages()),
-            const NewMessage(),
+            NewMessage(),
           ],
         )));
   }

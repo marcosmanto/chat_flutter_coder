@@ -35,7 +35,8 @@ class _NewMessageState extends State<NewMessage> {
             },
             onChanged: (msg) => setState(() => _message = msg),
             controller: _messageController,
-            decoration: const InputDecoration(labelText: 'Enviar mensagem...'),
+            decoration:
+                const InputDecoration(labelText: '  Enviar mensagem...'),
           ),
         ),
         IconButton(

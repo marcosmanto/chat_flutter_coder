@@ -13,7 +13,7 @@ class Messages extends StatefulWidget {
 
 class _MessagesState extends State<Messages> {
   final ScrollController _controller = ScrollController();
-  bool _showScrollDownButton = true;
+  final bool _showScrollDownButton = true;
 
   void _scrollDown() {
     _controller.animateTo(
@@ -23,6 +23,7 @@ class _MessagesState extends State<Messages> {
     );
   }
 
+  // ignore: unused_element
   void _showSnackBar(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(msg),

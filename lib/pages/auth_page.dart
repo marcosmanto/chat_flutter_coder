@@ -1,7 +1,6 @@
 import 'package:chat_flutter_coder/components/auth_form.dart';
 import 'package:chat_flutter_coder/core/models/auth_form_data.dart';
 import 'package:chat_flutter_coder/core/services/auth/auth_service.dart';
-import 'package:chat_flutter_coder/utils/clear_focus.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {
@@ -43,11 +42,9 @@ class _AuthPageState extends State<AuthPage> {
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Stack(
         children: [
-          ClearFocus(
-            child: Center(
-              child: SingleChildScrollView(
-                child: AuthForm(onSubmit: _handleSubmit),
-              ),
+          Center(
+            child: SingleChildScrollView(
+              child: AuthForm(onSubmit: _handleSubmit),
             ),
           ),
           if (_isLoading) // loading overlay

@@ -4,6 +4,7 @@ import 'package:chat_flutter_coder/core/models/chat_user.dart';
 import 'package:chat_flutter_coder/pages/auth_page.dart';
 import 'package:chat_flutter_coder/pages/chat_page.dart';
 import 'package:chat_flutter_coder/pages/loading_page.dart';
+import 'package:chat_flutter_coder/utils/clear_focus.dart';
 import 'package:flutter/material.dart';
 
 import '../core/services/auth/auth_service.dart';
@@ -13,48 +14,50 @@ class AuthOrAppPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ChatUser?>(
-      stream: AuthService().userChanges,
-      builder: (context, snapshot) => Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          toolbarHeight: 65,
-          leading: Align(
-            child: Transform.translate(
-              offset: const Offset(15, 0),
-              child: SizedBox(
-                width: 50,
-                height: 50,
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.grey,
-                  backgroundImage: (() {
-                    if (snapshot.data?.imageURL != null &&
-                        snapshot.data?.imageURL != '') {
-                      try {
-                        return (io.File(snapshot.data!.imageURL).existsSync()
-                                ? FileImage(io.File(snapshot.data!.imageURL))
-                                : AssetImage(snapshot.data!.imageURL))
-                            as ImageProvider;
-                      } catch (_) {
-                        return null;
+    return ClearFocus(
+      child: StreamBuilder<ChatUser?>(
+        stream: AuthService().userChanges,
+        builder: (context, snapshot) => Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            toolbarHeight: 65,
+            leading: Align(
+              child: Transform.translate(
+                offset: const Offset(15, 0),
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: (() {
+                      if (snapshot.data?.imageURL != null &&
+                          snapshot.data?.imageURL != '') {
+                        try {
+                          return (io.File(snapshot.data!.imageURL).existsSync()
+                                  ? FileImage(io.File(snapshot.data!.imageURL))
+                                  : AssetImage(snapshot.data!.imageURL))
+                              as ImageProvider;
+                        } catch (_) {
+                          return null;
+                        }
                       }
-                    }
-                  })(),
+                    })(),
+                  ),
                 ),
               ),
             ),
+            title: Text(
+              snapshot.data?.name ?? 'Not logged',
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
-          title: Text(
-            snapshot.data?.name ?? 'Not logged',
-            style: const TextStyle(color: Colors.white),
-          ),
+          body: snapshot.connectionState == ConnectionState.waiting
+              ? const LoadingPage()
+              : snapshot.hasData
+                  ? const ChatPage()
+                  : const AuthPage(),
         ),
-        body: snapshot.connectionState == ConnectionState.waiting
-            ? const LoadingPage()
-            : snapshot.hasData
-                ? const ChatPage()
-                : const AuthPage(),
       ),
     );
   }

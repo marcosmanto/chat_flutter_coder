@@ -56,7 +56,7 @@ class ChatMockService implements ChatService {
     );
     _msgs.add(newMessage);
     // save into the stream
-    _controller.add(_msgs);
+    _controller.add(_msgs.toList());
     return newMessage;
   }
 }

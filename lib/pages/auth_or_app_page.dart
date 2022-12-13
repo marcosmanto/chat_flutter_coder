@@ -49,8 +49,10 @@ class AuthOrAppPage extends StatelessWidget {
                               return (io.File(snapshot.data!.imageURL)
                                       .existsSync()
                                   ? FileImage(io.File(snapshot.data!.imageURL))
-                                  : AssetImage(snapshot
-                                      .data!.imageURL)) as ImageProvider;
+                                  : snapshot.data!.imageURL.startsWith('http')
+                                      ? NetworkImage(snapshot.data!.imageURL)
+                                      : AssetImage(snapshot
+                                          .data!.imageURL)) as ImageProvider;
                             } catch (_) {
                               return null;
                             }

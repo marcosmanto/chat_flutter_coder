@@ -83,7 +83,7 @@ class _AuthFormState extends State<AuthForm> {
                   decoration: const InputDecoration(labelText: 'E-mail'),
                   validator: (email) {
                     if (email!.trim().isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$")
+                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+(?:\.[a-zA-Z]{2,3}){1,2}$")
                             .hasMatch(email.trim())) {
                       return 'Informe um e-mail válido.';
                     }

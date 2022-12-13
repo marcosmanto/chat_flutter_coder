@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:chat_flutter_coder/components/messages.dart';
 import 'package:chat_flutter_coder/components/new_message.dart';
-import 'package:chat_flutter_coder/core/models/chat_notification.dart';
 import 'package:chat_flutter_coder/core/services/auth/auth_service.dart';
 import 'package:chat_flutter_coder/core/services/notifications/push_notification_service.dart';
 import 'package:chat_flutter_coder/pages/notification_page.dart';
@@ -37,9 +34,10 @@ class ChatPage extends StatelessWidget {
                     width: 70,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Icon(Icons.exit_to_app),
-                        Text('Sair'),
+                      children: [
+                        Icon(Icons.exit_to_app,
+                            color: Theme.of(context).colorScheme.primary),
+                        const Text('Sair'),
                       ],
                     ),
                   ),

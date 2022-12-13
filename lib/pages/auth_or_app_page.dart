@@ -5,8 +5,8 @@ import 'package:chat_flutter_coder/pages/auth_page.dart';
 import 'package:chat_flutter_coder/pages/chat_page.dart';
 import 'package:chat_flutter_coder/pages/loading_page.dart';
 import 'package:chat_flutter_coder/utils/clear_focus.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 
 import '../core/services/auth/auth_service.dart';
 

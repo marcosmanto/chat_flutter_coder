@@ -16,6 +16,14 @@ class AuthFirebaseService implements AuthService {
     }
   });
 
+  void _printCatchedError(String error, StackTrace stacktrace) {
+    // ignore: avoid_print
+    print(
+        '\n****************\n[ERROR]: ${error.toString()}\n****************\nstacktrace:$stacktrace');
+    // ignore: avoid_print
+    print('****************');
+  }
+
   @override
   ChatUser? get currentUser => _currentUser;
 
@@ -23,7 +31,16 @@ class AuthFirebaseService implements AuthService {
   Stream<ChatUser?> get userChanges => _userStream;
 
   @override
-  Future<void> login(String email, String password) async {}
+  Future<void> login(String email, String password) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email.toString().trim(),
+        password: password.toString().trim(),
+      );
+    } catch (error, stacktrace) {
+      _printCatchedError(error.toString(), stacktrace);
+    }
+  }
 
   @override
   Future<void> logout() async {
@@ -48,11 +65,7 @@ class AuthFirebaseService implements AuthService {
 
       credential.user!.updateDisplayName(name);
     } catch (error, stacktrace) {
-      // ignore: avoid_print
-      print(
-          '\n****************\n[ERROR]: ${error.toString()}\n****************\nstacktrace:$stacktrace');
-      // ignore: avoid_print
-      print('****************');
+      _printCatchedError(error.toString(), stacktrace);
     }
   }
 

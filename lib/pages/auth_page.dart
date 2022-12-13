@@ -31,6 +31,7 @@ class _AuthPageState extends State<AuthPage> {
         );
       }
     } catch (error) {
+      // catch errors here
     } finally {
       setState(() => _isLoading = false);
     }

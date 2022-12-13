@@ -18,6 +18,7 @@ class _NewMessageState extends State<NewMessage> {
 
     if (user != null) {
       await ChatService().save(_message, user);
+      setState(() => _message = '');
       _messageController.clear();
     }
   }
@@ -26,6 +27,7 @@ class _NewMessageState extends State<NewMessage> {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        const SizedBox(width: 10),
         Expanded(
           child: TextField(
             onSubmitted: (_) {
@@ -35,8 +37,7 @@ class _NewMessageState extends State<NewMessage> {
             },
             onChanged: (msg) => setState(() => _message = msg),
             controller: _messageController,
-            decoration:
-                const InputDecoration(labelText: '  Enviar mensagem...'),
+            decoration: const InputDecoration(labelText: 'Enviar mensagem...'),
           ),
         ),
         IconButton(

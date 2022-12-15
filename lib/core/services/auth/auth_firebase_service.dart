@@ -7,6 +7,7 @@ import 'package:chat_flutter_coder/core/services/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class AuthFirebaseService implements AuthService {
   static ChatUser? _currentUser;
@@ -57,13 +58,23 @@ class AuthFirebaseService implements AuthService {
     File? image,
   ) async {
     try {
-      UserCredential credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      // creates a secondary firebase app instance that controls the automatic login
+      final signup = await Firebase.initializeApp(
+        name: 'userSignup',
+        options: Firebase.app().options,
+      );
+
+      final auth = FirebaseAuth.instanceFor(app: signup);
+
+      UserCredential credential = await auth.createUserWithEmailAndPassword(
         email: email.toString().trim(),
         password: password.toString().trim(),
       );
 
       if (credential.user == null) return;
+
+      // 0.5 do the login
+      await login(email, password);
 
       // 1. User's photo upload
       final imageName = '${credential.user!.uid}.jpg';
@@ -74,16 +85,18 @@ class AuthFirebaseService implements AuthService {
       await credential.user!.updatePhotoURL(imageUrl);
 
       // 3. Save the user in DB (optional)
-      await _saveChatUser(_toChatUser(credential.user!, imageUrl));
+      await _saveChatUser(_toChatUser(credential.user!, name, imageUrl));
+
+      await signup.delete();
     } catch (error, stacktrace) {
       _printCatchedError(error.toString(), stacktrace);
     }
   }
 
-  static ChatUser _toChatUser(User user, [String? imageURL]) {
+  static ChatUser _toChatUser(User user, [String? name, String? imageURL]) {
     return ChatUser(
       id: user.uid,
-      name: user.displayName ?? user.email!.split('@')[0],
+      name: name ?? user.displayName ?? user.email!.split('@')[0],
       email: user.email!,
       imageURL: imageURL ?? user.photoURL ?? 'assets/images/avatar.png',
     );

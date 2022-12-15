@@ -108,7 +108,8 @@ class _MessagesState extends State<Messages> {
             child: Text('Sem dados. Inicie uma conversa.'),
           );
         } else {
-          final msgs = snapshot.data!;
+          final msgs = snapshot.data!
+            ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
           return _renderListView(msgs, currentUser);
         }
       },

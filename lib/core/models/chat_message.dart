@@ -26,7 +26,7 @@ class ChatMessage {
   Map<String, Object> toMap() {
     return {
       'text': text,
-      'createdAt': createdAt,
+      'createdAt': createdAt.toIso8601String(),
       'userId': userId,
       'userName': userName,
       'userImageUrl': userImageUrl,

@@ -1,12 +1,14 @@
 import 'dart:io' as io;
 
 import 'package:chat_flutter_coder/core/models/chat_user.dart';
+import 'package:chat_flutter_coder/core/services/notifications/push_notification_service.dart';
 import 'package:chat_flutter_coder/pages/auth_page.dart';
 import 'package:chat_flutter_coder/pages/chat_page.dart';
 import 'package:chat_flutter_coder/pages/loading_page.dart';
 import 'package:chat_flutter_coder/utils/clear_focus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../core/services/auth/auth_service.dart';
 
@@ -15,6 +17,7 @@ class AuthOrAppPage extends StatelessWidget {
 
   Future<void> init(BuildContext context) async {
     await Firebase.initializeApp();
+    await Provider.of<PushNotificationService>(context, listen: false).init();
   }
 
   @override

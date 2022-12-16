@@ -15,6 +15,7 @@ class ChatFirebaseService implements ChatService {
           fromFirestore: _fromFirestore,
           toFirestore: _toFirestore,
         )
+        .orderBy('createdAt')
         .snapshots();
 
     return snapshots.map((snapshot) {
